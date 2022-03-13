@@ -2,19 +2,25 @@ package com.shivambeohar.maps_sat
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.lifecycle.ViewModelProvider
 
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.PolylineOptions
 import com.shivambeohar.maps_sat.databinding.ActivityMapsBinding
 import com.shivambeohar.maps_sat.models.MapLocation
 
-class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
+class MapsActivity : AppCompatActivity(), OnMapReadyCallback, IRouteResponse {
 
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityMapsBinding
+    private lateinit var routeViewModel: RouteViewModel
+    private lateinit var listOfCoordinatePoints: ArrayList<LatLng>
+    private lateinit var polylineOptions: PolylineOptions
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,6 +32,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+        routeViewModel = ViewModelProvider(this).get(RouteViewModel::class.java)
+        polylineOptions = PolylineOptions()
+        listOfCoordinatePoints = ArrayList()
     }
 
     /**
@@ -49,6 +58,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         )
         addMarkerToPlaces(listOfPlaces)
         mMap.moveCamera(CameraUpdateFactory.newLatLng(MapLocation.KOCHIN.coordinate))
+
+        routeViewModel.getRoutesFor(MapLocation.KOCHIN.coordinate,MapLocation.COIMBATORE.coordinate)
+        routeViewModel.routeResponse = this
     }
 
     /**
@@ -59,5 +71,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         for (location in listOfPlaces) {
             mMap.addMarker(MarkerOptions().position(location.coordinate).title(location.name))
         }
+    }
+
+    override fun routeCoordinates(coordinates: List<List<Double>>) {
+
     }
 }
