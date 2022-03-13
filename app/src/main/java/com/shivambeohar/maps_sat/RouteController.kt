@@ -1,13 +1,12 @@
 package com.shivambeohar.maps_sat
 
-import androidx.lifecycle.ViewModel
 import com.google.android.gms.maps.model.LatLng
 import com.shivambeohar.maps_sat.api.RouteRequest
 import com.shivambeohar.maps_sat.models.data.Route
 import retrofit2.Call
 import retrofit2.Response
 
-class RouteViewModel : ViewModel() {
+class RouteController {
 
     var pathCoordinates: List<List<Double>>? = null
     private val parameters = HashMap<String, String>()

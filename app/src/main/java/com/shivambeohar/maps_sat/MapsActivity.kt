@@ -1,8 +1,8 @@
 package com.shivambeohar.maps_sat
 
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.lifecycle.ViewModelProvider
 
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -18,7 +18,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, IRouteResponse {
 
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityMapsBinding
-    private lateinit var routeViewModel: RouteViewModel
+    private var routeController: RouteController = RouteController()
     private lateinit var listOfCoordinatePoints: ArrayList<LatLng>
     private lateinit var polylineOptions: PolylineOptions
 
@@ -32,7 +32,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, IRouteResponse {
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
-        routeViewModel = ViewModelProvider(this).get(RouteViewModel::class.java)
+        routeController.routeResponse = this
         polylineOptions = PolylineOptions()
         listOfCoordinatePoints = ArrayList()
     }
@@ -59,8 +59,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, IRouteResponse {
         addMarkerToPlaces(listOfPlaces)
         mMap.moveCamera(CameraUpdateFactory.newLatLng(MapLocation.KOCHIN.coordinate))
 
-        routeViewModel.getRoutesFor(MapLocation.KOCHIN.coordinate,MapLocation.COIMBATORE.coordinate)
-        routeViewModel.routeResponse = this
+        routeController.getRoutesFor(MapLocation.KOCHIN.coordinate,MapLocation.COIMBATORE.coordinate)
+        routeController.getRoutesFor(MapLocation.COIMBATORE.coordinate,MapLocation.MADURAI.coordinate)
+        routeController.getRoutesFor(MapLocation.MADURAI.coordinate,MapLocation.MUNNAR.coordinate)
+        routeController.getRoutesFor(MapLocation.MUNNAR.coordinate,MapLocation.KOCHIN.coordinate)
+
     }
 
     /**
@@ -74,6 +77,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, IRouteResponse {
     }
 
     override fun routeCoordinates(coordinates: List<List<Double>>) {
-
+        for(coordinate: List<Double> in coordinates) {
+            listOfCoordinatePoints.add(LatLng(coordinate[1], coordinate[0]))
+        }
+            polylineOptions.addAll(listOfCoordinatePoints)
+            polylineOptions.width(12f)
+            polylineOptions.color(Color.GREEN)
+            polylineOptions.geodesic(true)
+            mMap.addPolyline(polylineOptions)
     }
 }
