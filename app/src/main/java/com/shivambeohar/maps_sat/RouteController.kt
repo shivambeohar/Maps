@@ -19,6 +19,7 @@ class RouteController {
      * @param destLatLng destination location coordinates
      */
     private fun addHeaders(originLatLng: LatLng, destLatLng: LatLng) {
+        point.clear()
         //parameters are of same name therefore needs to be separated from the QueryMap.
         point.apply {
             add("${originLatLng.latitude},${originLatLng.longitude}")

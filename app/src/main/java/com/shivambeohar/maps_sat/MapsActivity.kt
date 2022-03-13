@@ -77,6 +77,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, IRouteResponse {
     }
 
     override fun routeCoordinates(coordinates: List<List<Double>>) {
+        listOfCoordinatePoints.clear()
         for(coordinate: List<Double> in coordinates) {
             listOfCoordinatePoints.add(LatLng(coordinate[1], coordinate[0]))
         }
