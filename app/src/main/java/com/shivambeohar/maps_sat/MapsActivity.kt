@@ -18,8 +18,20 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, IRouteResponse {
 
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityMapsBinding
+
+    /**
+     * Holds RouteController Instance.
+     */
     private var routeController: RouteController = RouteController()
+
+    /**
+     * Holds list of Coordinates for route path.
+     */
     private lateinit var listOfCoordinatePoints: ArrayList<LatLng>
+
+    /**
+     * PolyOption for drawing path on the map.
+     */
     private lateinit var polylineOptions: PolylineOptions
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -78,13 +90,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, IRouteResponse {
 
     override fun routeCoordinates(coordinates: List<List<Double>>) {
         listOfCoordinatePoints.clear()
-        for(coordinate: List<Double> in coordinates) {
+        for (coordinate: List<Double> in coordinates) {
             listOfCoordinatePoints.add(LatLng(coordinate[1], coordinate[0]))
         }
-            polylineOptions.addAll(listOfCoordinatePoints)
-            polylineOptions.width(12f)
-            polylineOptions.color(Color.GREEN)
-            polylineOptions.geodesic(true)
-            mMap.addPolyline(polylineOptions)
+        polylineOptions.addAll(listOfCoordinatePoints)
+        polylineOptions.width(12f)
+        polylineOptions.color(Color.GREEN)
+        polylineOptions.geodesic(true)
+        mMap.addPolyline(polylineOptions)
     }
 }

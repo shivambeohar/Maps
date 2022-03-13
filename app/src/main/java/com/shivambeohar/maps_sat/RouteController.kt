@@ -6,11 +6,29 @@ import com.shivambeohar.maps_sat.models.data.Route
 import retrofit2.Call
 import retrofit2.Response
 
+/**
+ * Controller class for making Api calls.
+ */
 class RouteController {
 
+    /**
+     * Holding the list of coordinates from the api response.
+     */
     var pathCoordinates: List<List<Double>>? = null
+
+    /**
+     * Holds Query parameters.
+     */
     private val parameters = HashMap<String, String>()
+
+    /**
+     * Holds origin and destination coordinates.
+     */
     private val point = ArrayList<String>()
+
+    /**
+     * Callback listener for updating UI.
+     */
     var routeResponse: IRouteResponse? = null
 
     /**
